@@ -1,3 +1,14 @@
+data "aws_secretsmanager_secret_version" "db" {
+  secret_id = "todoapp/db_credentials"
+}
+
+# Decode JSON stored in Secrets Manager
+locals {
+  db_creds = jsondecode(data.aws_secretsmanager_secret_version.db.secret_string)
+}
+
+
+
 resource "aws_db_instance" "todo_db" {
   allocated_storage      = 10
   max_allocated_storage  = 20
@@ -5,9 +16,9 @@ resource "aws_db_instance" "todo_db" {
   engine_version         = "13"
   instance_class         = "db.t3.micro"
 
-  username               = var.db_user
-  password               = var.db_password
-  db_name                = "todosDB"
+  username                = local.db_creds["username"]
+  password                = local.db_creds["password"]
+  db_name                 = local.db_creds["dbname"]
 
   vpc_security_group_ids = [aws_security_group.rds_sg.id]
   publicly_accessible    = false
