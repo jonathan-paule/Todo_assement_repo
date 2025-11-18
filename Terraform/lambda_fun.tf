@@ -2,14 +2,13 @@ resource "aws_lambda_function" "todo_lambda" {
   function_name = "todo-crud"
   runtime       = "python3.12"
   handler       = "app.lambda_handler"
-  filename      = "lambda.zip"
+  filename      = "lambda/todo-api.zip"
+  role          = aws_iam_role.lambda_exec_role.arn
 
-  environment {
+ environment {
     variables = {
-      DB_HOST = aws_db_instance.todo_db.address
-      DB_USER = var.db_user
-      DB_PASS = var.db_password
-      DB_NAME = "todos"
+      SECRET_NAME = "todoapp/db_credentials"
+      REGION      = var.region
     }
   }
 
