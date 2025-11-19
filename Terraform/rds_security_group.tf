@@ -1,19 +1,3 @@
-#lambda sg
-resource "aws_security_group" "lambda_sg" {
-  name        = "${var.project}-lambda-sg"
-  description = "Lambda SG"
-  vpc_id      = aws_vpc.main.id
-
-  # No inbound for Lambda
-
-  # Outbound open 
-  egress {
-    from_port   = 0
-    to_port     = 0
-    protocol    = "-1"
-    cidr_blocks = ["0.0.0.0/0"]
-  }
-}
 
 #rds sg
 
@@ -51,26 +35,5 @@ resource "aws_security_group_rule" "rds_egress" {
   protocol          = "-1"
   security_group_id = aws_security_group.rds_sg.id
   cidr_blocks       = ["0.0.0.0/0"]
-}
-
-# bastion sg
-resource "aws_security_group" "bastion_sg" {
-  name        = "${var.project}-bastion-sg"
-  description = "Bastion Host SG"
-  vpc_id      = aws_vpc.main.id
-
-  ingress {
-    from_port   = 22
-    to_port     = 22
-    protocol    = "tcp"
-    cidr_blocks = [var.my_ip]   # "your-ip/32"
-  }
-
-  egress {
-    from_port   = 0
-    to_port     = 0
-    protocol    = "-1"
-    cidr_blocks = ["0.0.0.0/0"]
-  }
 }
 
