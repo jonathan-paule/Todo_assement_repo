@@ -12,9 +12,9 @@ locals {
 resource "aws_db_instance" "todo_db" {
   allocated_storage      = 10
   max_allocated_storage  = 20
-  engine                 = "postgres"
+  engine                 = var.engine
   engine_version         = "13"
-  instance_class         = "db.t3.micro"
+  instance_class         = var.instance_class
 
   username                = local.db_creds["username"]
   password                = local.db_creds["password"]
