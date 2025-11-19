@@ -4,6 +4,7 @@ data "aws_caller_identity" "current" {}
 resource "aws_apigatewayv2_api" "todo_api" {
   name          = var.api_name  #todo-http-api is the name
   protocol_type = var.protocol_type
+  auto_deploy = true
 }
 
 
