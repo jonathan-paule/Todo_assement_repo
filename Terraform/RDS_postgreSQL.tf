@@ -8,12 +8,13 @@ resource "aws_db_subnet_group" "db_subnets" {
   }
 }
 
+
 resource "aws_db_instance" "todo_db" {
   identifier              = "todo-db"
   allocated_storage       = 10
   max_allocated_storage   = 20
-  engine                  = var.engine
-  engine_version          = "13"
+  engine                  = var.engine         
+  engine_version          = "8.0"             
   instance_class          = var.instance_class
 
   username = var.db_username
@@ -27,4 +28,6 @@ resource "aws_db_instance" "todo_db" {
   skip_final_snapshot     = true
   deletion_protection     = false
   backup_retention_period = 0
+
+  parameter_group_name = "default.mysql8.0"   
 }
