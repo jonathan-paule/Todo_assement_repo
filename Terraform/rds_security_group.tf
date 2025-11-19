@@ -1,13 +1,14 @@
-
-#rds sg
-
 resource "aws_security_group" "rds_sg" {
   name        = "${var.project}-rds-sg"
   description = "RDS Security Group"
   vpc_id      = aws_vpc.main.id
+
+  tags = {
+    Name = "${var.project}-rds-sg"
+  }
 }
 
-# Allow Lambda to connect to RDS
+# Allow Lambda SG to connect to RDS on 3306
 resource "aws_security_group_rule" "rds_from_lambda" {
   type                     = "ingress"
   from_port                = 3306
@@ -15,9 +16,10 @@ resource "aws_security_group_rule" "rds_from_lambda" {
   protocol                 = "tcp"
   security_group_id        = aws_security_group.rds_sg.id
   source_security_group_id = aws_security_group.lambda_sg.id
+  description              = "Allow Lambda to connect to MySQL"
 }
 
-# Allow Bastion to connect to RDS
+# Allow Bastion SG to connect to RDS on 3306
 resource "aws_security_group_rule" "rds_from_bastion" {
   type                     = "ingress"
   from_port                = 3306
@@ -25,9 +27,10 @@ resource "aws_security_group_rule" "rds_from_bastion" {
   protocol                 = "tcp"
   security_group_id        = aws_security_group.rds_sg.id
   source_security_group_id = aws_security_group.bastion_sg.id
+  description              = "Allow Bastion to connect to MySQL"
 }
 
-# Outbound
+# RDS outbound (allow all)
 resource "aws_security_group_rule" "rds_egress" {
   type              = "egress"
   from_port         = 0
@@ -36,4 +39,3 @@ resource "aws_security_group_rule" "rds_egress" {
   security_group_id = aws_security_group.rds_sg.id
   cidr_blocks       = ["0.0.0.0/0"]
 }
-
