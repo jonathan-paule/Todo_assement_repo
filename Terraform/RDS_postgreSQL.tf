@@ -1,6 +1,7 @@
 resource "aws_db_subnet_group" "db_subnets" {
   name       = "db-subnet-grp"
-  subnet_ids = [aws_subnet.private_subnet.id]
+  subnet_ids = [aws_subnet.private_subnet.id,
+                aws_subnet.private_subnet2.id]
 
   tags = {
     Name = "todo-db-subnet-group"
