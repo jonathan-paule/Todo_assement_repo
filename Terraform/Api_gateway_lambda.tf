@@ -1,3 +1,6 @@
+data "aws_caller_identity" "current" {}
+
+
 resource "aws_apigatewayv2_api" "todo_api" {
   name          = var.api_name
   protocol_type = var.protocol_type
