@@ -11,4 +11,4 @@ resource "aws_secretsmanager_secret_version" "db" {
     dbname   = var.db_name
     port     = "5432"
   })
-}
+}.
