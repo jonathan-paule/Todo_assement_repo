@@ -73,7 +73,7 @@ variable "protocol_type" {
 variable "my_ip" {
     description = "my_ip"
     type = string
-    default = "49.205.34.24"
+    default = "49.205.34.24/32"
   
 }
 
