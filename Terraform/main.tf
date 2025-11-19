@@ -9,7 +9,7 @@ terraform {
   }
 
   backend "s3" {
-    bucket = "state_bucket1223355"
+    bucket = "todo-state-bucket-assement"
     key    = "terraform.tfstate"
     region = "us-east-1"
   }
