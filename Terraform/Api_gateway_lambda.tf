@@ -1,6 +1,6 @@
 resource "aws_apigatewayv2_api" "todo_api" {
-  name          = "todo-http-api"
-  protocol_type = "HTTP"
+  name          = var.api_name
+  protocol_type = var.protocol_type
 }
 
 resource "aws_apigatewayv2_integration" "lambda_integration" {
