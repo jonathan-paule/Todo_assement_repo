@@ -6,7 +6,7 @@ resource "aws_security_group" "lambda_sg" {
 
   # No inbound for Lambda
 
-  # Outbound open (default AWS behavior)
+  # Outbound open 
   egress {
     from_port   = 0
     to_port     = 0
