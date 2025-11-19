@@ -38,7 +38,7 @@ resource "aws_iam_role_policy" "lambda_secrets_policy" {
         Action = [
           "secretsmanager:GetSecretValue"
         ]
-        Resource = "arn:aws:secretsmanager:${var.region}:${data.aws_caller_identity.current.account_id}:secret:todoapp/db_credentials*"
+        Resource = aws_secretsmanager_secret.db.arn
       }
     ]
   })
