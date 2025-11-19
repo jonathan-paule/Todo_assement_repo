@@ -6,6 +6,8 @@ resource "aws_apigatewayv2_api" "todo_api" {
   protocol_type = var.protocol_type
 }
 
+
+
 resource "aws_apigatewayv2_integration" "lambda_integration" {
   api_id           = aws_apigatewayv2_api.todo_api.id
   integration_type = "AWS_PROXY"
@@ -15,6 +17,12 @@ resource "aws_apigatewayv2_integration" "lambda_integration" {
 resource "aws_apigatewayv2_route" "default_route" {
   api_id    = aws_apigatewayv2_api.todo_api.id
   route_key = "ANY /todos/{proxy+}"
+  target    = "integrations/${aws_apigatewayv2_integration.lambda_integration.id}"
+}
+
+resource "aws_apigatewayv2_route" "todos_root" {
+  api_id    = aws_apigatewayv2_api.todo_api.id
+  route_key = "ANY /todos"
   target    = "integrations/${aws_apigatewayv2_integration.lambda_integration.id}"
 }
 
