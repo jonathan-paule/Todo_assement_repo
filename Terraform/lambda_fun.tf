@@ -7,7 +7,7 @@ resource "aws_lambda_function" "todo_lambda" {
 
  environment {
     variables = {
-      SECRET_NAME = "todoapp/db_credentials"
+      DB_SECRET_NAME = aws_secretsmanager_secret.db.name
       REGION      = var.region
     }
   }
