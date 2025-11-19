@@ -16,9 +16,9 @@ resource "aws_db_instance" "todo_db" {
   engine_version         = "13"
   instance_class         = var.instance_class
 
-  username                = local.db_creds["username"]
-  password                = local.db_creds["password"]
-  db_name                 = local.db_creds["dbname"]
+  username                = var.db_username
+  password                = var.db_password
+  db_name                 = var.db_name
 
   vpc_security_group_ids = [aws_security_group.rds_sg.id]
   publicly_accessible    = false
