@@ -4,22 +4,15 @@ import psycopg2
 import os
 
 # ---------------------------
-#  Load Secrets
+# Load Secrets
 # ---------------------------
 secrets_client = boto3.client("secretsmanager")
-
 SECRET_NAME = os.environ.get("DB_SECRET_NAME", "todoapp/db_credentials")
-
-cached_secret = None   # Cache to avoid calling Secrets Manager every time
-
+cached_secret = None   # Cache to avoid repeated Secrets Manager calls
 
 def get_db_credentials():
-    """
-    Fetch DB credentials from Secrets Manager.
-    Cached after first call to reduce latency.
-    """
+    """Fetch DB credentials from Secrets Manager (cached)."""
     global cached_secret
-
     if cached_secret:
         return cached_secret
 
@@ -29,9 +22,8 @@ def get_db_credentials():
         cached_secret = json.loads(secret_string)
         return cached_secret
     except Exception as e:
-        print(f"ERROR: Unable to load DB credentials from Secrets Manager: {e}")
+        print(f"ERROR: Unable to load DB credentials: {e}")
         raise e
-
 
 # ---------------------------
 # PostgreSQL Connection
@@ -39,12 +31,10 @@ def get_db_credentials():
 conn = None
 
 def get_db_connection():
-    """Establishes a database connection using credentials from Secrets Manager."""
+    """Establish a DB connection using cached credentials."""
     global conn
-
     if conn is None or conn.closed:
         creds = get_db_credentials()
-
         try:
             conn = psycopg2.connect(
                 host=creds["host"],
@@ -55,13 +45,11 @@ def get_db_connection():
                 connect_timeout=5
             )
             conn.autocommit = True
-            print(" Connected to PostgreSQL inside private subnet.")
+            print("Connected to PostgreSQL.")
         except Exception as e:
-            print(f" Database Connection Failed: {e}")
+            print(f"Database Connection Failed: {e}")
             raise e
-
     return conn
-
 
 # ---------------------------
 # Helper Functions
@@ -70,13 +58,22 @@ def format_todo(row, cursor):
     col_names = [desc[0] for desc in cursor.description]
     return dict(zip(col_names, row))
 
+def safe_json_parse(body):
+    """Safely parse JSON from Lambda event body."""
+    try:
+        return json.loads(body or '{}')
+    except json.JSONDecodeError:
+        return None
 
 # ---------------------------
-#  Lambda Handler
+# Lambda Handler
 # ---------------------------
 def lambda_handler(event, context):
-    method = event.get('httpMethod')
-    path = event.get('path')
+    print("EVENT:", json.dumps(event))  # Debug: see incoming event
+
+    # HTTP API v2 mapping
+    method = event['requestContext']['http']['method']
+    path = event['requestContext']['http']['path']
     path_parameters = event.get('pathParameters')
     todo_id = path_parameters.get('id') if path_parameters else None
 
@@ -93,7 +90,11 @@ def lambda_handler(event, context):
         # CREATE (POST /todos)
         # --------------------------
         if method == 'POST' and path == '/todos':
-            body = json.loads(event.get('body', '{}'))
+            body = safe_json_parse(event.get('body'))
+            if body is None:
+                return {'statusCode': 400, 'headers': headers,
+                        'body': json.dumps({'message': 'Invalid JSON'})}
+
             title = body.get('title')
             description = body.get('description', '')
             completed = body.get('completed', False)
@@ -125,7 +126,6 @@ def lambda_handler(event, context):
         elif method == 'GET' and todo_id:
             cur.execute("SELECT * FROM todos WHERE id = %s", (todo_id,))
             row = cur.fetchone()
-
             if row:
                 return {'statusCode': 200, 'headers': headers,
                         'body': json.dumps(format_todo(row, cur))}
@@ -137,31 +137,25 @@ def lambda_handler(event, context):
         # UPDATE (PUT /todos/{id})
         # --------------------------
         elif method == 'PUT' and todo_id:
-            body = json.loads(event.get('body', '{}'))
+            body = safe_json_parse(event.get('body'))
+            if body is None:
+                return {'statusCode': 400, 'headers': headers,
+                        'body': json.dumps({'message': 'Invalid JSON'})}
 
             updates = []
             values = []
 
-            if 'title' in body:
-                updates.append("title = %s")
-                values.append(body['title'])
-
-            if 'description' in body:
-                updates.append("description = %s")
-                values.append(body['description'])
-
-            if 'completed' in body:
-                updates.append("completed = %s")
-                values.append(body['completed'])
+            for key in ['title', 'description', 'completed']:
+                if key in body:
+                    updates.append(f"{key} = %s")
+                    values.append(body[key])
 
             if not updates:
                 return {'statusCode': 400, 'headers': headers,
                         'body': json.dumps({'message': 'No fields to update'})}
 
             values.append(todo_id)
-
             query = f"UPDATE todos SET {', '.join(updates)} WHERE id = %s RETURNING *"
-
             cur.execute(query, tuple(values))
             row = cur.fetchone()
 
