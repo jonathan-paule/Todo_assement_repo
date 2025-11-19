@@ -1,9 +1,9 @@
 resource "aws_lambda_function" "todo_lambda" {
-  function_name = "todo-crud"
-  runtime       = "python3.12"
+  function_name = var.function_name
+  runtime       = var.runtime
   handler       = "app.lambda_handler"
-  filename      = "lambda/todo-api.zip"
-  role          = aws_iam_role.lambda_exec_role.arn
+  filename      = var.filename
+  #role          = aws_iam_role.lambda_exec_role.arn
 
  environment {
     variables = {
