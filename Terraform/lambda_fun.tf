@@ -3,7 +3,7 @@ resource "aws_lambda_function" "todo_lambda" {
   runtime       = var.runtime
   handler       = "app.lambda_handler"
   filename      = var.filename
-  #role          = aws_iam_role.lambda_exec_role.arn
+  role          = aws_iam_role.lambda_exec_role.arn
 
  environment {
     variables = {
