@@ -69,3 +69,11 @@ variable "protocol_type" {
     default = "HTTP"
   
 }
+
+variable "my_ip" {
+    description = "my_ip"
+    type = string
+    default = "49.205.34.24"
+  
+}
+
