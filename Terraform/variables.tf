@@ -45,7 +45,7 @@ variable "filename" {
 variable "engine" {
     description = "RDS engine" 
     type = string
-    default = "postgres"
+    default = "mysql"
   
 }
 
