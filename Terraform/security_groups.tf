@@ -23,16 +23,16 @@ resource "aws_security_group" "rds_sg" {
   vpc_id      = aws_vpc.main.id
 
   ingress {
-    from_port       = 5432
-    to_port         = 5432
+    from_port       = 3306
+    to_port         = 3306
     protocol        = "tcp"
     security_groups = [aws_security_group.lambda_sg.id]
     description     = "Allow Lambda"
   }
 
   ingress {
-    from_port       = 5432
-    to_port         = 5432
+    from_port       = 3306
+    to_port         = 3306
     protocol        = "tcp"
     security_groups = [aws_security_group.bastion_sg.id]
     description     = "Allow Bastion"
