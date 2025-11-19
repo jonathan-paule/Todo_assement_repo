@@ -13,7 +13,8 @@ resource "aws_lambda_function" "todo_lambda" {
   }
 
   vpc_config {
-    subnet_ids         = [aws_subnet.private_subnet.id]
+    subnet_ids         = [aws_subnet.private_subnet.id,
+                          aws_subnet.private_subnet2.id]
     security_group_ids = [aws_security_group.lambda_sg.id]
   }
 }
