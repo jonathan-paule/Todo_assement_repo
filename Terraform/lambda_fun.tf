@@ -1,7 +1,7 @@
 resource "aws_lambda_function" "todo_lambda" {
   function_name = var.function_name
   runtime       = var.runtime
-  handler       = "app.lambda_handler"
+  handler       = "todo-api.lambda_handler"
   filename      = var.filename
   role          = aws_iam_role.lambda_exec_role.arn
 
