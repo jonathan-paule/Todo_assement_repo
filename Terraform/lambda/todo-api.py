@@ -31,6 +31,7 @@ try:
         user=creds["username"],
         passwd=creds["password"],
         db=creds["dbname"],
+        port=int(creds.get("port", 3306)),
         connect_timeout=5,
         cursorclass=pymysql.cursors.DictCursor
     )
