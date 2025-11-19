@@ -9,6 +9,6 @@ resource "aws_secretsmanager_secret_version" "db" {
     password = var.db_password
     host     = aws_db_instance.todo_db.address
     dbname   = var.db_name
-    port     = "5432"
+    port     = 5432
   })
 }
