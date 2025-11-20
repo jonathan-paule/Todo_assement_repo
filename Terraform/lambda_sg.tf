@@ -3,30 +3,23 @@ resource "aws_security_group" "lambda_sg" {
   description = "Allow Lambda to access RDS"
   vpc_id      = aws_vpc.main.id
 
-  ingress {
-    from_port       = 3306
-    to_port         = 3306
-    protocol        = "tcp"
-    cidr_blocks     = ["0.0.0.0/0"]
 
-  }
 
-  egress {
-    description = "Allow Lambda to connect to RDS for private subnet1"
-    from_port   = 3306 
-    to_port     = 3306 
-    protocol    = "tcp"
-    cidr_blocks = ["10.0.2.0/24"]
-  }
+resource "aws_security_group_rule" "lambda_sg_inbound" {
+  type                     = "ingress"
+  from_port                = 3306
+  to_port                  = 3306
+  protocol                 = "tcp"
+  security_group_id        = aws_security_group.lambda_sg.id
+  source_security_group_id = aws_security_group.rdsmysql_sg.id
+  description              = "inbound"
 
-egress {
-    description = "Allow Lambda to connect to RDS for private subnet2"
-    from_port   = 3306
-    to_port     = 3306
-    protocol    = "tcp"
-    cidr_blocks = ["10.0.3.0/24"]  
-  }
-  tags = {
-    Name = "lambda-sg"
-  }
-}
+
+resource "aws_security_group_rule" "lambda_sg_outbound" {
+  type                     = "egress"
+  from_port                = 3306
+  to_port                  = 3306
+  protocol                 = "tcp"
+  security_group_id        = aws_security_group.lambda_sg.id
+  source_security_group_id = aws_security_group.rdsmysql_sg.id
+  description              = "outbound"
