@@ -8,27 +8,17 @@ resource "aws_security_group" "rds_sg" {
   }
 }
 
-# Allow Lambda SG to connect to RDS on 3306
+# Allow Lambda SG to connect to RDS on all ports 
 resource "aws_security_group_rule" "rds_from_lambda" {
   type                     = "ingress"
-  from_port                = 3306
-  to_port                  = 3306
-  protocol                 = "tcp"
+  from_port                = 0
+  to_port                  = 0
+  protocol                 = "-1"
   security_group_id        = aws_security_group.rds_sg.id
   source_security_group_id = aws_security_group.lambda_sg.id
-  description              = "Allow Lambda to connect to MySQL"
+  description              = "Allow all traffic from Lambda SG"
 }
 
-# Allow Bastion SG to connect to RDS on 3306
-resource "aws_security_group_rule" "rds_from_bastion" {
-  type                     = "ingress"
-  from_port                = 3306
-  to_port                  = 3306
-  protocol                 = "tcp"
-  security_group_id        = aws_security_group.rds_sg.id
-  source_security_group_id = aws_security_group.bastion_sg.id
-  description              = "Allow Bastion to connect to MySQL"
-}
 
 # RDS outbound (allow all)
 resource "aws_security_group_rule" "rds_egress" {
