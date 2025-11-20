@@ -21,7 +21,7 @@ resource "aws_db_instance" "todo_db" {
   password = var.db_password
   db_name  = var.db_name
 
-  vpc_security_group_ids = [aws_security_group.rds_sg.id]
+  vpc_security_group_ids = [aws_security_group.rdsmysql_sg.id]
   db_subnet_group_name   = aws_db_subnet_group.db_subnets.name
 
   port                    = 3306  
