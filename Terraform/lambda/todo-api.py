@@ -1,25 +1,9 @@
 import json
 import os
 import pymysql
-import boto3
 
 # Global connection reused between Lambda invocations
 CONN = None
-
-# --- Secrets Manager: Fetch DB Creds ---
-def get_db_credentials():
-    secret_name = os.environ.get("DB_SECRET_NAME")
-
-    if not secret_name:
-        raise Exception("Environment variable DB_SECRET_NAME not set")
-
-    region = os.environ.get("AWS_REGION", "us-east-1")
-    client = boto3.client("secretsmanager", region_name=region)
-
-    response = client.get_secret_value(SecretId=secret_name)
-    secrets = json.loads(response["SecretString"])
-
-    return secrets
 
 # --- API Gateway Response Helper ---
 def build_response(status_code, body=None):
@@ -56,11 +40,9 @@ def get_todos(todo_id, conn):
             sql = "SELECT id, title, description, completed FROM todos WHERE id = %s"
             cursor.execute(sql, (todo_id,))
             result = cursor.fetchone()
-
             if result:
                 return build_response(200, result)
             return build_response(404, {"error": f"Todo with ID {todo_id} not found"})
-
         else:
             sql = "SELECT id, title, description, completed FROM todos ORDER BY id DESC"
             cursor.execute(sql)
@@ -78,15 +60,12 @@ def update_todo(todo_id, data, conn):
     if "title" in data:
         updates.append("title = %s")
         params.append(data["title"])
-
     if "description" in data:
         updates.append("description = %s")
         params.append(data["description"])
-
     if "completed" in data:
         updates.append("completed = %s")
         params.append(data["completed"])
-
     if not updates:
         return build_response(400, {"error": "No fields provided to update"})
 
@@ -96,10 +75,8 @@ def update_todo(todo_id, data, conn):
     with conn.cursor() as cursor:
         cursor.execute(sql, tuple(params))
         conn.commit()
-
         if cursor.rowcount == 0:
             return build_response(404, {"error": f"Todo with ID {todo_id} not found"})
-
     return build_response(200, {"message": f"Todo {todo_id} updated successfully"})
 
 
@@ -111,10 +88,8 @@ def delete_todo(todo_id, conn):
     with conn.cursor() as cursor:
         cursor.execute(sql, (todo_id,))
         conn.commit()
-
         if cursor.rowcount == 0:
             return build_response(404, {"error": f"Todo with ID {todo_id} not found"})
-
     return build_response(204)
 
 
@@ -124,14 +99,13 @@ def lambda_handler(event, context):
 
     # --- Ensure DB Connection exists ---
     if CONN is None:
-        print("Creating new MySQL connection...")
-        creds = get_db_credentials()
-
+        print("Creating new MySQL connection from environment variables...")
         CONN = pymysql.connect(
-            host=creds["host"],
-            user=creds["username"],
-            passwd=creds["password"],
-            db=creds["dbname"],
+            host=os.environ.get("DB_HOST"),
+            user=os.environ.get("DB_USERNAME"),
+            passwd=os.environ.get("DB_PASSWORD"),
+            db=os.environ.get("DB_NAME"),
+            port=int(os.environ.get("DB_PORT", 3306)),
             connect_timeout=5,
             cursorclass=pymysql.cursors.DictCursor
         )
@@ -155,19 +129,14 @@ def lambda_handler(event, context):
         # Routes
         if http_method == "POST" and path == "/todos":
             return create_todo(body_data, CONN)
-
         elif http_method == "GET" and path == "/todos":
             return get_todos(None, CONN)
-
         elif http_method == "GET" and todo_id:
             return get_todos(todo_id, CONN)
-
         elif http_method == "PUT" and todo_id:
             return update_todo(todo_id, body_data, CONN)
-
         elif http_method == "DELETE" and todo_id:
             return delete_todo(todo_id, CONN)
-
         else:
             return build_response(405, {"error": "Method not allowed"})
     except Exception as e:
