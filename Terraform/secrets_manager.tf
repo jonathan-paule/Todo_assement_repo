@@ -1,5 +1,5 @@
 resource "aws_secretsmanager_secret" "db" {
-  name = "todoapp/db_credentials"
+  name = "todoapp/db_credentials_for_todo"
 }
 
 resource "aws_secretsmanager_secret_version" "db" {
