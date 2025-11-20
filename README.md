@@ -10,8 +10,6 @@ This repository contains a **Todo API** project implemented on **AWS**. All infr
 2. [Repository Structure](#repository-structure)  
 3. [Features](#features)  
 4. [Setup and Deployment](#setup-and-deployment)  
-5. [Technologies Used](#technologies-used)  
-6. [Author](#author)  
 
 ---
 
@@ -31,7 +29,6 @@ The **Todo API** allows users to create, read, update, and delete (CRUD) todo ta
 
 - **Lambda/** – Contains Lambda function code for the Todo API.
   - `app.py` – Main Lambda function implementation.  
-  - `requirements.txt` – Python dependencies for Lambda functions.
 
 
 ---
