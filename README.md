@@ -62,3 +62,26 @@ terraform apply
 chmod 400 todo_key_pair.pem 
 ssh -i "todo_key_pair.pem" ec2-user@public-ip-of-bastion
 ```
+3. **To connect to RDS using the below**
+```bash
+mysql -h <your-rds-endpoint> -P <port> -u <your-username> -p
+then
+use <database_name>
+then execute this query to create a table
+CREATE TABLE todos (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    title VARCHAR(255) NOT NULL,
+    description TEXT,
+    completed BOOLEAN DEFAULT FALSE,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+```
+4. **testing CRUD api**
+    using the api endpoint we can test CRUD api. api endpoint and database endpoint will be taken from the terraform output.
+
+5 **Destroying the resources**
+```bash
+terraform destroy
+```
+
