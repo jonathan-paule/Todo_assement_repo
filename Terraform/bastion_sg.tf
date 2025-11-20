@@ -24,5 +24,5 @@ resource "aws_security_group_rule" "egress_mysql" {
   # This correctly references the ID of the Bastion SG defined above
   security_group_id        = aws_security_group.bastion_sg.id 
 
-  description              = "to access db
+  description              = "to access db"
 }
