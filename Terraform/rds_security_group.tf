@@ -11,9 +11,9 @@ resource "aws_security_group" "rdsmysql_sg" {
 # Allow Lambda SG to connect to RDS on all ports
 resource "aws_security_group_rule" "rds_from_lambda" {
   type                     = "ingress"
-  from_port                = 0
-  to_port                  = 0
-  protocol                 = "-1"
+  from_port                = 3306
+  to_port                  = 3306
+  protocol                 = "tcp"
   security_group_id        = aws_security_group.rdsmysql_sg.id
   source_security_group_id = aws_security_group.lambda_sg.id
   description              = "Allow Lambda to connect to RDS (all ports)"
