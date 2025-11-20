@@ -3,7 +3,7 @@ resource "aws_security_group" "lambda_sg" {
   description = "Allow Lambda to access RDS"
   vpc_id      = aws_vpc.main.id
 
-
+}
 
 resource "aws_security_group_rule" "lambda_sg_inbound" {
   type                     = "ingress"
@@ -13,7 +13,7 @@ resource "aws_security_group_rule" "lambda_sg_inbound" {
   security_group_id        = aws_security_group.lambda_sg.id
   source_security_group_id = aws_security_group.rdsmysql_sg.id
   description              = "inbound"
-
+}
 
 resource "aws_security_group_rule" "lambda_sg_outbound" {
   type                     = "egress"
@@ -23,3 +23,4 @@ resource "aws_security_group_rule" "lambda_sg_outbound" {
   security_group_id        = aws_security_group.lambda_sg.id
   source_security_group_id = aws_security_group.rdsmysql_sg.id
   description              = "outbound"
+}
