@@ -5,10 +5,12 @@ resource "aws_lambda_function" "todo_lambda" {
   filename      = var.filename
   role          = aws_iam_role.lambda_exec_role.arn
 
- environment {
+  environment {
     variables = {
-      DB_SECRET_NAME = aws_secretsmanager_secret.db.name
-      REGION      = var.region
+      DB_NAME     = var.db_name
+      DB_USERNAME = var.db_username
+      DB_PASSWORD = var.db_password
+      DB_HOST     = aws_db_instance.todo_db.address
     }
   }
 
