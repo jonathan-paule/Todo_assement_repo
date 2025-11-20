@@ -1,5 +1,4 @@
-#lambda_role
-
+# Lambda Execution Role
 resource "aws_iam_role" "lambda_exec_role" {
   name = "${var.project}-lambda-exec-role"
 
@@ -17,29 +16,8 @@ resource "aws_iam_role" "lambda_exec_role" {
   })
 }
 
-# policy attachment
+# Attach AWS-managed policy for VPC access (only needed if Lambda is in a VPC)
 resource "aws_iam_role_policy_attachment" "vpc_access" {
   role       = aws_iam_role.lambda_exec_role.name
   policy_arn = "arn:aws:iam::aws:policy/service-role/AWSLambdaVPCAccessExecutionRole"
-}
-
-
-#inline policy
-
-resource "aws_iam_role_policy" "lambda_secrets_policy" {
-  name = "lambda-secrets-policy"
-  role = aws_iam_role.lambda_exec_role.id
-
-  policy = jsonencode({
-    Version = "2012-10-17"
-    Statement = [
-      {
-        Effect = "Allow"
-        Action = [
-          "secretsmanager:GetSecretValue"
-        ]
-        Resource = aws_secretsmanager_secret.db.arn
-      }
-    ]
-  })
 }
