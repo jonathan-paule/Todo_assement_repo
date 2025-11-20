@@ -38,4 +38,9 @@ resource "aws_apigatewayv2_stage" "default" {
   api_id      = aws_apigatewayv2_api.todo_api.id
   name        = "$default"
   auto_deploy = true
+  depends_on = [
+    aws_lambda_permission.apigw_permission,
+    aws_apigatewayv2_integration.lambda_integration
+  ]
+}
 }
