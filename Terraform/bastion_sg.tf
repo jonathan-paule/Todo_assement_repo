@@ -18,11 +18,17 @@ resource "aws_security_group_rule" "egress_mysql" {
   to_port                  = 3306
   protocol                 = "tcp"
   
-  # CORRECTED: The attribute to reference the ID is simply '.id'
   source_security_group_id = aws_security_group.rdsmysql_sg.id 
   
-  # This correctly references the ID of the Bastion SG defined above
   security_group_id        = aws_security_group.bastion_sg.id 
 
   description              = "to access db"
+}
+resource "aws_security_group_rule" "egress_mysql_https" {
+  type                     = "egress"
+  from_port                = 443
+  to_port                  = 443
+  protocol                 = "tcp"
+  cidr_blocks              = ["0.0.0.0/0"] 
+  description              = for downloading mysql on bastion
 }
