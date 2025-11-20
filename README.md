@@ -1,4 +1,4 @@
-# Todo API Assessment
+# Todo CRUD API Assessment
 
 This repository contains a **Todo API** project implemented on **AWS**. All infrastructure resources are provisioned using **Terraform**, and the application is deployed using **AWS Lambda** and **API Gateway**. The database backend is a private **RDS** instance.
 
