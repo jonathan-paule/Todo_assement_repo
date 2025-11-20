@@ -43,4 +43,4 @@ resource "aws_apigatewayv2_stage" "default" {
     aws_apigatewayv2_integration.lambda_integration
   ]
 }
-}
+
