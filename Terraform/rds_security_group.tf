@@ -14,7 +14,7 @@ resource "aws_security_group_rule" "rds_from_lambda" {
   from_port                = 0
   to_port                  = 0
   protocol                 = "-1"
-  security_group_id        = aws_security_group.rds_sg.id
+  security_group_id        = aws_security_group.rdsmysql_sg.id
   source_security_group_id = aws_security_group.lambda_sg.id
   description              = "Allow Lambda to connect to RDS (all ports)"
 }
@@ -27,6 +27,6 @@ resource "aws_security_group_rule" "rds_egress" {
   from_port         = 0
   to_port           = 0
   protocol          = "-1"
-  security_group_id = aws_security_group.rds_sg.id
+  security_group_id = aws_security_group.rdsmysql_sg.id
   cidr_blocks       = ["0.0.0.0/0"]
 }
