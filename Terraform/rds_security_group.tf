@@ -1,4 +1,4 @@
-resource "aws_security_group" "rds_sg" {
+resource "aws_security_group" "rdsmysql_sg" {
   name        = "${var.project}-rds-sg"
   description = "RDS Security Group"
   vpc_id      = aws_vpc.main.id
