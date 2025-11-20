@@ -105,7 +105,7 @@ def lambda_handler(event, context):
             user=os.environ.get("DB_USERNAME"),
             passwd=os.environ.get("DB_PASSWORD"),
             db=os.environ.get("DB_NAME"),
-            port=int(os.environ.get("DB_PORT", 3306)),
+            port=3306,
             connect_timeout=5,
             cursorclass=pymysql.cursors.DictCursor
         )
