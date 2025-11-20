@@ -23,7 +23,7 @@ resource "aws_security_group_rule" "rds_from_bastion" {
   from_port                = 3306
   to_port                  = 3306
   protocol                 = "tcp"
-  security_group_id        = aws_security_group.rds_sg.id
+  security_group_id        = aws_security_group.rdsmysql_sg.id
   source_security_group_id = aws_security_group.bastion_sg.id
   description              = "Allow Bastion to connect to MySQL"
 }
