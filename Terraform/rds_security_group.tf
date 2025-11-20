@@ -8,7 +8,7 @@ resource "aws_security_group" "rds_sg" {
   }
 }
 
-# Allow Lambda SG to connect to RDS on all ports 
+# Allow Lambda SG to connect to RDS on all ports
 resource "aws_security_group_rule" "rds_from_lambda" {
   type                     = "ingress"
   from_port                = 0
@@ -16,8 +16,9 @@ resource "aws_security_group_rule" "rds_from_lambda" {
   protocol                 = "-1"
   security_group_id        = aws_security_group.rds_sg.id
   source_security_group_id = aws_security_group.lambda_sg.id
-  description              = "Allow all traffic from Lambda SG"
+  description              = "Allow Lambda to connect to RDS (all ports)"
 }
+
 
 
 # RDS outbound (allow all)
