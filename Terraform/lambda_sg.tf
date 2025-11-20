@@ -19,6 +19,14 @@ resource "aws_security_group" "lambda_sg" {
     security_groups = [aws_security_group.rds_sg.id]
   }
 
+egress {
+    description = "Allow Lambda to access Secrets Manager (HTTPS)"
+    from_port   = 443
+    to_port     = 443
+    protocol    = "tcp"
+    cidr_blocks = ["0.0.0.0/0"]  
+  }
+
   tags = {
     Name = "lambda-sg"
   }
