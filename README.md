@@ -28,7 +28,7 @@ The **Todo API** allows users to create, read, update, and delete (CRUD) todo ta
   And all required resources .tf files  
 
 - **Lambda/** – Contains Lambda function code for the Todo API.
-  - `app.py` – Main Lambda function implementation.  
+  - `todo-api.py` – Main Lambda function implementation.  
 
 
 ---
@@ -39,7 +39,7 @@ The **Todo API** allows users to create, read, update, and delete (CRUD) todo ta
 - AWS Lambda backend.  
 - API Gateway fronted API.  
 - Private RDS database.  
-- Secure secrets management using **AWS Secrets Manager**.  
+- secrets are stored in Environment variables  
 - Infrastructure as Code using **Terraform**.
 
 ---
@@ -49,7 +49,16 @@ The **Todo API** allows users to create, read, update, and delete (CRUD) todo ta
 1. **Deploy Terraform resources:**
 
 ```bash
+git clone https://github.com/jonathan-paule/Todo_assement_repo.git
+cd Todo_assement_repo
 cd Terraform
 terraform init
 terraform plan
 terraform apply
+```
+2. **To ssh into the bastion use the below command**
+
+```bash
+chmod 400 todo_key_pair.pem 
+ssh -i "todo_key_pair.pem" ec2-user@public-ip-of-bastion
+```
