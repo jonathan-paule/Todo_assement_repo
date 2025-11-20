@@ -30,5 +30,5 @@ resource "aws_security_group_rule" "egress_mysql_https" {
   to_port                  = 443
   protocol                 = "tcp"
   cidr_blocks              = ["0.0.0.0/0"] 
-  description              = for downloading mysql on bastion
+  description              = "for downloading mysql on bastion"
 }
