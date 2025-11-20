@@ -27,7 +27,7 @@ variable "project" {
 variable "function_name" {
     description = "lambda_fun_name"
     type = string
-    default = "todo-crud"
+    default = "todo-crud-api"
 }
 variable "runtime" {
     description = "lambda runtime" 
