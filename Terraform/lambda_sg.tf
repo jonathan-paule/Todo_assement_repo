@@ -4,29 +4,28 @@ resource "aws_security_group" "lambda_sg" {
   vpc_id      = aws_vpc.main.id
 
   ingress {
-    from_port       = 0
-    to_port         = 0
-    protocol        = "-1"
-    security_groups = []
-    # No inbound needed unless Lambda receives traffic inside VPC
+    from_port       = 3306
+    to_port         = 3306
+    protocol        = "tcp"
+    cidr_blocks     = ["0.0.0.0/0"]
+
   }
 
   egress {
-    description = "Allow Lambda to connect to RDS"
+    description = "Allow Lambda to connect to RDS for private subnet1"
     from_port   = 3306 
     to_port     = 3306 
     protocol    = "tcp"
-    security_groups = [aws_security_group.rds_sg.id]
+    cidr_blocks = ["10.0.2.0/24"]
   }
 
 egress {
-    description = "Allow Lambda to access Secrets Manager (HTTPS)"
-    from_port   = 443
-    to_port     = 443
+    description = "Allow Lambda to connect to RDS for private subnet2"
+    from_port   = 3306
+    to_port     = 3306
     protocol    = "tcp"
-    cidr_blocks = ["0.0.0.0/0"]  
+    cidr_blocks = ["10.0.3.0/24"]  
   }
-
   tags = {
     Name = "lambda-sg"
   }
