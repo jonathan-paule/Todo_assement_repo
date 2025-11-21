@@ -79,7 +79,7 @@ CREATE TABLE todos (
 ```
 4. **testing CRUD api**
 ```bash
-   using the api endpoint we can test CRUD api. api endpoint and database endpoint will be taken from the terraform output.
+   using the api endpoint we can test CRUD api in postman or using local curl command. api endpoint and database endpoint will be taken from the terraform output.
 ```
 5 **Destroying the resources**
 ```bash
