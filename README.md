@@ -61,7 +61,10 @@ terraform apply
 ```bash
 chmod 400 todo_key_pair.pem 
 ssh -i "todo_key_pair.pem" ec2-user@public-ip-of-bastion
-```
+  ssh -N -L 3306:<RDS_ENDPOINT>:3306 ec2-user@<BASTION_HOST_PUBLIC_IP> -i /path/to/your/key.pem
+4:21
+mysqlsh -u <RDS_USERNAME> -h 127.0.0.1 -P 3306
+```tunnelling
 3. **To connect to RDS using the below**
 ```bash
 mysql -h <your-rds-endpoint> -P <port> -u <your-username> -p
