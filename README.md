@@ -97,8 +97,31 @@ terraform destroy
 **dont forget to destroy the resources**
 
 6. **Screenshots for testing api**
-   **For POST method**
+7. 
+   **For POST Method**
+
+
    <img src="Screenshots/POST.png">
    
 
+
+   **For GET Method**
+
+
+   <img src="Screenshots/GET.png">
+
+   
+   **For PUT Method**
+
+
+   <img src="Screenshots/PUT.png">
+
+
+
+
+   **For DELETE Method**
+
+
+   <img src="Screenshots/DELETE.png">
+   
 
