@@ -98,7 +98,7 @@ terraform destroy
 
 6. **Screenshots for testing api**
    **For POST method**
-   ❮img src="Screenshots/POST.png" ❯
+   <img src="Screenshots/POST.png">
    
 
 
