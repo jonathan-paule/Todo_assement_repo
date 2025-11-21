@@ -88,11 +88,17 @@ CREATE TABLE todos (
          5. then paste the api gateway endpoint and select the method POST or GET or PUT or DELETE
          6. then click the send option
          7. now you can see the output.
+
 ```
 5 **Destroying the resources**
 ```bash
 terraform destroy
 ```
 **dont forget to destroy the resources**
+
+6. **Screenshots for testing api**
+   **For POST method**
+   ❮img src="Screenshots/POST.png" ❯
+   
 
 
