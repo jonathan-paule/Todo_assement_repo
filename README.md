@@ -80,9 +80,19 @@ CREATE TABLE todos (
 4. **testing CRUD api**
 ```bash
    using the api endpoint we can test CRUD api in postman or using local curl command. api endpoint and database endpoint will be taken from the terraform output.
+       steps to test api in postman
+         1. login to postman
+         2. create a workspace
+         3. create a new collection and give a name
+         4. inside that collection create a request and give a name
+         5. then paste the api gateway endpoint and select the method POST or GET or PUT or DELETE
+         6. then click the send option
+         7. now you can see the output.
 ```
 5 **Destroying the resources**
 ```bash
 terraform destroy
 ```
+**dont forget to destroy the resources**
+
 
