@@ -97,7 +97,7 @@ terraform destroy
 **dont forget to destroy the resources**
 
 6. **Screenshots for testing api**
-7. 
+  
    **For POST Method**
 
 
